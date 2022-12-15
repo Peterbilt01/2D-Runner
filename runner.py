@@ -2,6 +2,7 @@ import pygame
 import sys 
 from random import randint
 from pygame import mixer
+import os
 
 def draw_sky():
     screen.blit(sky_surface,(skypos,0))
@@ -54,9 +55,9 @@ def player_animation():
         player_surface=player_walk[int(player_index)]
 
 mixer.init()
-jump=pygame.mixer.Sound("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\audio\\jump.mp3")
-bg=pygame.mixer.Sound("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\audio\\music.wav")
-gameover_sound=pygame.mixer.Sound("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\audio\\gameover.wav")
+jump=pygame.mixer.Sound(os.path.join("audio","jump.mp3"))
+bg=pygame.mixer.Sound(os.path.join("audio","music.wav"))
+gameover_sound=pygame.mixer.Sound(os.path.join("audio","gameover.wav"))
 bg.play(-1)
 start_time=0
 floarpos=0
@@ -67,46 +68,46 @@ score=0
 pygame.init()
 screen=pygame.display.set_mode((800,400))
 pygame.display.set_caption("Save the Runner")
+pygame.display.set_icon(pygame.image.load(os.path.join("icon","icon.svg")))
 clock =pygame.time.Clock()
 game_active=True
-text=pygame.font.Font('C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\font\\Pixeltype.ttf',50)
-
+text=pygame.font.Font(os.path.join("font","Pixeltype.ttf"),50)
 #sky and ground surface
-sky_surface=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\sky.png").convert()
-ground_surface=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\ground.png").convert()
+sky_surface=pygame.image.load(os.path.join("graphics","Sky.png")).convert()
+ground_surface=pygame.image.load(os.path.join("graphics","ground.png")).convert()
 
 obstricle_rectangle_list=[]
 
 #snail
-snail_surface_frame1=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\snail\\snail1.png").convert_alpha()
+snail_surface_frame1=pygame.image.load(os.path.join("graphics\\snail","snail1.png")).convert_alpha()
 snail_surface_frame1=pygame.transform.rotozoom(snail_surface_frame1,0,0.72)
-snail_surface_frame2=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\snail\\snail2.png").convert_alpha()
+snail_surface_frame2=pygame.image.load(os.path.join("graphics\\snail","snail2.png")).convert_alpha()
 snail_surface_frame2=pygame.transform.rotozoom(snail_surface_frame2,0,0.72)
 snail_frame=[snail_surface_frame1,snail_surface_frame2]
 snail_index=0
 snail_surface=snail_frame[snail_index]
 
 #fly surface
-fly_surface_frame1=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Fly\\Fly1.png")
-fly_surface_frame2=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Fly\\Fly2.png")
+fly_surface_frame1=pygame.image.load(os.path.join("graphics\\Fly","Fly1.png"))
+fly_surface_frame2=pygame.image.load(os.path.join("graphics\\Fly","Fly2.png"))
 fly_frame=[fly_surface_frame1,fly_surface_frame2]
 fly_index=0
 fly_surface=fly_frame[fly_index]
 
 #player urface
-player_walk1=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Player\\player_stand.png").convert_alpha()
-player_walk2=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Player\\player_walk_1.png").convert_alpha()
-player_walk3=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Player\\player_walk_2.png").convert_alpha()
+player_walk1=pygame.image.load(os.path.join("graphics\\Player","player_stand.png")).convert_alpha()
+player_walk2=pygame.image.load(os.path.join("graphics\\Player","player_walk_1.png")).convert_alpha()
+player_walk3=pygame.image.load(os.path.join("graphics\\Player","player_walk_2.png")).convert_alpha()
 player_walk=[player_walk3,player_walk2,player_walk1]
 player_index=0
-player_jump=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Player\\jump.png").convert_alpha()
+player_jump=pygame.image.load(os.path.join("graphics\\Player","jump.png")).convert_alpha()
 player_surface=player_walk[player_index]
 player_rectangle=player_surface.get_rect(midbottom=(80,300))
 player_gravity=0
 
 
 # game over player 
-player_stand=pygame.image.load("C:\\Users\\Gunjan Kumari\\Desktop\\New folder\\projects\\runner\\graphics\\Player\\player_stand.png").convert_alpha()
+player_stand=pygame.image.load(os.path.join("graphics\\Player","player_stand.png")).convert_alpha()
 player_stand=pygame.transform.rotozoom(player_stand,0,2)
 player_stand_rectangle=player_stand.get_rect(center=(400,200))
 
@@ -129,12 +130,13 @@ pygame.time.set_timer(snail_animation_timer,600)
 #fly timer
 fly_animation_timer=pygame.USEREVENT+3
 pygame.time.set_timer(fly_animation_timer,200)
-
-while True:
+run=True
+while run:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
-            pygame.quit()
-            exit()       
+            run=False
+            
+                   
                
         if event.type==pygame.KEYDOWN and game_active:
             if event.key==pygame.K_SPACE and player_rectangle.bottom >=300:            
@@ -217,4 +219,4 @@ while True:
     
     pygame.display.update()
     clock.tick(60+xp)
-
+pygame.quit()
